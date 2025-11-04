@@ -1,0 +1,6 @@
+vk-api==11.9.9
+requests==2.31.0
+flask==2.3.3
+python-dotenv==1.0.0
+gunicorn==21.2.0
+urllib3==1.26.18
