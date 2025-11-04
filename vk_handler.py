@@ -73,19 +73,16 @@ class VKBot:
                         user_id = message['from_id']
                         text = message['text'].strip()
                         
-                        # Игнорируем пустые сообщения
                         if not text:
                             continue
                         
                         logger.info(f"Message from {user_id}: {text}")
                         
-                        # Обработка команд
                         command_response = self.handle_commands(text, user_id)
                         if command_response:
                             self.send_message(user_id, command_response)
                             continue
                         
-                        # Показываем "печатает..."
                         try:
                             self.vk.messages.setActivity(
                                 user_id=user_id,
@@ -94,23 +91,17 @@ class VKBot:
                         except:
                             pass
                         
-                        # Получаем историю диалога
                         user_history = self.get_user_session(user_id)
-                        
-                        # Получаем ответ от AI
                         response = self.ai_client.send_message(text, user_history)
                         
-                        # Обновляем историю (ограничиваем размер)
                         user_history.extend([
                             {"role": "user", "content": text},
                             {"role": "assistant", "content": response}
                         ])
                         
-                        # Ограничиваем историю последними 6 сообщениями
                         if len(user_history) > 6:
                             user_history = user_history[-6:]
                         
-                        # Отправляем ответ
                         self.send_message(user_id, response)
                         
             except Exception as e:
